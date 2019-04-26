@@ -3,6 +3,7 @@ package com.mj;
 class Main {
 
 	public static void main(String[] args) {
+		// java.util.ArrayList<E>
 		
 		ArrayList<Person> persons = new ArrayList<>();
 		persons.add(new Person("Jack",10));
@@ -11,7 +12,8 @@ class Main {
 		persons.add(new Person("mark",20));
 		System.out.println(persons);
 		
-		System.out.println(persons.indexOf(null));
+		// 
+		//System.out.println(persons.indexOf(null));
 		// 提醒JVM进行垃圾回收 - 不是实时收回
 		System.gc();
 		System.runFinalization();

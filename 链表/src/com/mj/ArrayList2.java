@@ -1,24 +1,26 @@
 package com.mj;
 
-//  option + command + j 生成注释
-public class ArrayList<E> {
-	/**
-	 * 元素的数量
-	 */
-	private int size;
+
+/**
+ * 有动态缩容操作
+ * @author mark
+ *
+ * @param <E>
+ */
+public class ArrayList2<E> extends AbstractList<E> {
 	/**
 	 * 所有元素
 	 * */
 	private E[] elements;
 	
 	private static final int DEFAULT_CAPACITY = 10;
-	private static final int ELEMENT_NOT_FOUND = -1;
+
 	@SuppressWarnings("unchecked")
-	public ArrayList(int capaticy) {
+	public ArrayList2(int capaticy) {
 		capaticy  = capaticy < DEFAULT_CAPACITY ? DEFAULT_CAPACITY : capaticy;
 		elements = (E[]) new Object[capaticy];
 	}
-	public ArrayList() {
+	public ArrayList2() {
 		this(DEFAULT_CAPACITY);
 	}
 	
@@ -30,57 +32,6 @@ public class ArrayList<E> {
 			elements[i] = null;
 		}
 		size = 0;
-	}
-
-	/**
-	 * 元素的数量
-	 * @return
-	 */
-      
-	public int size() {
-		return size;
-	}
-
-	/**
-	 * 是否为空
-	 * @return
-	 */
-	public boolean isEmpty() {
-		return size == 0;
-	}
-
-	/**
-	 * 是否包含某个元素
-	 * @param element
-	 * @return
-	 */
-	public boolean contains(E element) {
-		return indexOf(element) != ELEMENT_NOT_FOUND;
-	}
-
-	/**
-	 * 添加元素到尾部
-	 * @param element
-	 */
-	public void add(E element) {
-		add(size,element);
-		/**
-		if (size < elements.length) {
-			elements[size] = element;
-			size++;
-		}else {
-			System.out.println("容量不足开始扩容" + ",");
-			// 扩容
-			int newElements[] = new int [2*size];
-			for (int i = 0; i < size; i++) {
-				newElements[i] = elements[i];
-			}
-			elements = newElements;
-	        //添加元素
-			elements[size] = element;
-			size++;
-		}
-		**/
 	}
 	/**
 	 * 获取index位置的元素
@@ -142,6 +93,9 @@ public class ArrayList<E> {
 		}
 		//size--; 需要清空内存地址
 		elements[--size] = null;
+		
+		trim();
+		
 		return old;
 	}
     public void  remove(E element) {
@@ -183,6 +137,24 @@ public class ArrayList<E> {
 		// 可以优化拷贝的速度
 		// System.arraycopy(src, srcPos, dest, destPos, length);
 		System.out.println(oldCapacity + ": 扩容为:" + newCapacity);
+	}
+	
+	/**
+	 * 剩余空间占总容量的一半时，就进行错荣
+	 */
+	@SuppressWarnings("unchecked")
+	private void trim() {
+		int capactity = capacity();
+		int newCapacity = capactity >> 1;
+		// 所有元素大于等于一半
+		if (size >= newCapacity || capactity <= DEFAULT_CAPACITY) return;
+		// 需要缩容
+		E [] newElements = (E[]) new Object[newCapacity];
+		for (int i = 0; i < size; i++) {
+			newElements[i] = elements[i];
+		}
+		elements = newElements;
+		System.out.println(capactity + "缩容为:" + newCapacity);
 	}
 	
 	@Override

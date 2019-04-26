@@ -1,8 +1,8 @@
-package com.mj;
+package com.mj.single;
 
 import com.mj.AbstractList;
 
-public class LinkedList<E> extends AbstractList<E> {
+public class SingleLinkedList<E> extends AbstractList<E> {
 
 	// 接口设计
 	// 将公共方法抽取到基类 abstract class 
