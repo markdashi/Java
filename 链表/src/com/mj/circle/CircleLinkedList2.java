@@ -1,14 +1,31 @@
-package com.mj;
+package com.mj.circle;
 
 import com.mj.AbstractList;
 
-public class LinkedList<E> extends AbstractList<E> {
+/**
+ * 双向循环链表 - 约瑟夫问题
+ * 
+ * 考虑增设一个成员变量 3个方法
+ * 
+ * 1》 current
+ * 2》 reset() ：让current 指向头结点first
+ * 3》 E next() 让current往后走一步，也就是current = current.next
+ * 4》 E remove() :删除current指向的节点，删除成功后让current指向下一个节点
+ * @author mark
+ *
+ * @param <E>
+ */
+public class CircleLinkedList2<E> extends AbstractList<E> {
 
 	// 接口设计
 	// 将公共方法抽取到基类 abstract class 
 	
 	private Node<E> first;
     private Node<E> last;
+    private Node<E> current;
+    
+    
+    
 
 	private static class Node<E> {
 		E element;
@@ -37,7 +54,28 @@ public class LinkedList<E> extends AbstractList<E> {
 			return sb.toString();
 		}
 	}
-
+	public void reset() {
+		current = first;
+	}
+	public E next() {
+		if (current == null) return null;
+		current = current.next;
+		return current.element;
+	}
+	
+	public E remove() {
+		if (current == null) return null;
+		Node<E> next = current.next;
+		E element = remove(current);
+		// 只剩下一个元素,确保删除掉
+		if (size == 0) {
+			current = null;
+		}else {
+			current = next;
+		}
+		return element;	
+	}
+	
 	@Override
 	public void clear() {
 		size = 0;
@@ -79,49 +117,58 @@ public class LinkedList<E> extends AbstractList<E> {
 		// 向最后面添加
 		// 最开始空链表时 ，last 为空 index == 0 size == 0
 		if (index == size) {
-			last = new Node<E>(last, element, null);
-			if (last.prev == null) { // 链表添加的第一个元素
+			last = new Node<E>(last, element, first); // 最后一个指向first
+			if (last.prev == null) { // 这是链表添加的第一个元素
 				first = last;
+				first.next = first;
+				last.next = first;
 			}else {
 				last.prev.next = last;	
+				first.prev = last;
 			}
 		}else {
 			Node<E> next = node(index);
 			Node<E> prev = next.prev;
 			Node<E> node = new Node<E>(prev, element, next);
 			next.prev = node;
+			prev.next = node;
+			
 			// index = 0 情况
-			if (prev == null) {
+			if (index == 0) { //next = first
 				first = node;
-			}else {
-				prev.next = node;
 			}
 		}
 		size ++;
 	}
 
+	private E remove(Node<E> node) {
+		if (size == 1) {
+			first = null;
+			last = null;
+		}else {
+			Node<E> prev = node.prev;
+			Node<E> next = node.next;
+			prev.next = next;
+			next.prev = prev;
+			
+			if (node == first) { //node == first
+				first = next;
+			}
+			// 删除最后一个节点
+			if (node == last) { // index == size - 1
+				last = prev;
+			}
+		}
+		size--;
+		return node.element;
+	}
+	
 	@Override
 	public E remove(int index) {
 		rangeCheck(index);
-		
-		Node<E> node = node(index);
-		Node<E> prev = node.prev;
-		Node<E> next = node.next;
-		
-		if (prev == null) { //index = 0
-			first = next;
-		}else {
-			prev.next = next;
-		}
-		if (next == null) { // index == size - 1
-			last = prev;
-		} else {
-			next.prev = prev;
-		}
-		 size --;
-		 return node.element;
+		return remove(node(index));
 	}
-
+	
 	@Override
 	public int indexOf(E element) {
 		if (element == null) {

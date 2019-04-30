@@ -1,8 +1,14 @@
-package com.mj;
+package com.mj.circle;
 
 import com.mj.AbstractList;
 
-public class LinkedList<E> extends AbstractList<E> {
+/**
+ * 双向循环链表
+ * @author mark
+ *
+ * @param <E>
+ */
+public class CircleLinkedList<E> extends AbstractList<E> {
 
 	// 接口设计
 	// 将公共方法抽取到基类 abstract class 
@@ -79,22 +85,25 @@ public class LinkedList<E> extends AbstractList<E> {
 		// 向最后面添加
 		// 最开始空链表时 ，last 为空 index == 0 size == 0
 		if (index == size) {
-			last = new Node<E>(last, element, null);
-			if (last.prev == null) { // 链表添加的第一个元素
+			last = new Node<E>(last, element, first); // 最后一个指向first
+			if (last.prev == null) { // 这是链表添加的第一个元素
 				first = last;
+				first.next = first;
+				last.next = first;
 			}else {
 				last.prev.next = last;	
+				first.prev = last;
 			}
 		}else {
 			Node<E> next = node(index);
 			Node<E> prev = next.prev;
 			Node<E> node = new Node<E>(prev, element, next);
 			next.prev = node;
+			prev.next = node;
+			
 			// index = 0 情况
-			if (prev == null) {
+			if (index == 0) { //next = first
 				first = node;
-			}else {
-				prev.next = node;
 			}
 		}
 		size ++;
@@ -104,19 +113,24 @@ public class LinkedList<E> extends AbstractList<E> {
 	public E remove(int index) {
 		rangeCheck(index);
 		
-		Node<E> node = node(index);
-		Node<E> prev = node.prev;
-		Node<E> next = node.next;
-		
-		if (prev == null) { //index = 0
-			first = next;
+		Node<E> node = first;
+		if (size == 1) {
+			first = null;
+			last = null;
 		}else {
+			node = node(index);
+			Node<E> prev = node.prev;
+			Node<E> next = node.next;
 			prev.next = next;
-		}
-		if (next == null) { // index == size - 1
-			last = prev;
-		} else {
 			next.prev = prev;
+			
+			if (index == 0) { //node == first
+				first = next;
+			}
+			// 删除最后一个节点
+			if (node == last) { // index == size - 1
+				last = prev;
+			}
 		}
 		 size --;
 		 return node.element;

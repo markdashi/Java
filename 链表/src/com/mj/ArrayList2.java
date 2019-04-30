@@ -3,6 +3,9 @@ package com.mj;
 
 /**
  * 有动态缩容操作
+ * 
+ * clear() && remove()
+ * 
  * @author mark
  *
  * @param <E>
@@ -27,11 +30,17 @@ public class ArrayList2<E> extends AbstractList<E> {
 	/**
 	 * 清除所有元素
 	 */
+	@SuppressWarnings("unchecked")
 	public void clear() {
 		for (int i = 0; i < size; i++) {
 			elements[i] = null;
 		}
 		size = 0;
+		
+		//清空数组后，进行动态缩容
+		if (elements != null && elements.length > DEFAULT_CAPACITY) {
+			elements = (E[]) new Object[DEFAULT_CAPACITY];
+		}
 	}
 	/**
 	 * 获取index位置的元素
