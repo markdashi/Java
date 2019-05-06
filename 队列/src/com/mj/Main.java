@@ -1,14 +1,42 @@
 package com.mj;
 
+import com.mj.circle.CircleDeque;
 import com.mj.circle.CircleQueue;
 
 public class Main {
-
+	
 	public static void main(String[] args) {
 		
-		circleQueue();
-
+		douleCircleQueue();
 	}
+	
+	/**
+	 * 循环队列测试
+	 */
+	static void douleCircleQueue(){
+		CircleDeque<Integer> queue = new CircleDeque<>();
+		
+		// 真是内存结构 和 队列实际 排布没有关系
+		// 头 4 5     尾
+		for (int i = 0; i < 10; i++) {
+			queue.enQueueFront(i+1);
+			queue.enQueueRear(i+100);
+		}
+//		for (int i = 0; i < 3; i++) {
+//			queue.deQueueFront();
+//			queue.deQueueRear();
+//		}
+//		queue.enQueueFront(11);
+//		queue.enQueueFront(12);
+		System.out.println(queue);
+		while (!queue.isEmpty()) {
+			System.out.println(queue.deQueueFront());
+		}
+	}
+	
+	/**
+	 * 循环队列测试
+	 */
 	static void circleQueue() {
 		CircleQueue<Integer> queue = new CircleQueue<>();
 		
@@ -17,14 +45,14 @@ public class Main {
 			queue.enQueue(i);
 		}
 		// null null null null null 5 6 7 8 9
-		for (int i = 0; i < 5; i++) {
-			queue.deQueue();
-		}
-		System.out.println(queue);
-		//15 16 17 18 19 5 6 7 8 9
-		for (int i = 15; i < 23; i++) {
-			queue.enQueue(i);
-		}
+//		for (int i = 0; i < 5; i++) {
+//			queue.deQueue();
+//		}
+//		System.out.println(queue);
+//		//15 16 17 18 19 5 6 7 8 9
+//		for (int i = 15; i < 23; i++) {
+//			queue.enQueue(i);
+//		}
 		System.out.println(queue);
 //		while (!queue.isEmpty()) {
 //			System.out.println(queue.deQueue());

@@ -1,6 +1,6 @@
 package com.mj.circle;
 /**
- * 循环队列
+ * 循环双端队列
  * 
  * 使用动态数组来实现
  * 
@@ -8,14 +8,14 @@ package com.mj.circle;
  *
  */
 @SuppressWarnings("unchecked")
-public class CircleQueue<E> {
+public class CircleDeque<E> {
 	
 	private int front;
 	private int size;
 	private E[] elements;
 	private static final int DEFAULT_CAPACITY = 10;
 	
-	public CircleQueue(){
+	public CircleDeque(){
 		elements = (E[]) new Object[DEFAULT_CAPACITY];
 	}
 	
@@ -25,23 +25,54 @@ public class CircleQueue<E> {
 	public boolean isEmpty() {
 		return size == 0;
 	}
-	public void enQueue(E element) {
-		ensureCapacity(size+1);
-		
-		elements[(front+size)%elements.length] = element;
-		size++;
-	}
-	public E deQueue() {
-	    E frontElement = elements[front];
+
+	// 从头部出队
+	public E deQueueFront() {
+		E frontElement = elements[front];
 	    elements[front] = null;
-	    front =  (front+1)%elements.length;
+	    front =  index(1);
 	    size--;
 	    return frontElement;
 	}
+    // 从头部入队
+	public void enQueueFront(E element) {
+		ensureCapacity(size+1);
+		
+		front = index(-1);
+		elements[front] = element;
+		size++;
+	}
+	// 从尾部入队
+	public void enQueueRear(E element) {
+		ensureCapacity(size+1);
+
+		elements[index(size)] = element;
+		size++;
+	}
+	// 从尾部出队
+	public E deQueueRear() {
+		int realIndex = index(size-1);
+		E rearElement = elements[realIndex];
+		elements[realIndex] = null;
+		size--;
+		return rearElement;
+	}
+    // 获取头部
 	public E front() {
 		return elements[front];
 	}
-	
+	//获取尾部
+	public E rear() {
+		return elements[index(size-1)];
+	}
+	//索引查找
+	private int index(int index) {
+		index += front;
+		if (index < 0) {
+			return index + elements.length;
+		}
+		return index % elements.length;
+	}
 	private void ensureCapacity(int capacity) {
 		int oldCapacity = elements.length;
 		if (oldCapacity >= capacity) return;
@@ -49,6 +80,8 @@ public class CircleQueue<E> {
 		// 扩容1.5倍
 		int newCapacity = oldCapacity + (oldCapacity >> 1);
 		E [] newElements = (E[]) new Object[newCapacity];
+		
+		System.out.println("开始扩容...." + "oldSize=" + size + " " + "newSize= "+ newElements.length);
 		
 		for (int i = 0; i < size; i++) {
 			newElements[i] = elements[(front+i)%elements.length];
@@ -58,11 +91,6 @@ public class CircleQueue<E> {
 		
 		// 重置front
 		front = 0;
-	}
-	
-	// 封装索引查找
-	private int index(int index) {
-		return (index+front)%elements.length;
 	}
 	
 	@Override
@@ -81,3 +109,4 @@ public class CircleQueue<E> {
 		return stringBuilder.toString();
 		}
 }
+
