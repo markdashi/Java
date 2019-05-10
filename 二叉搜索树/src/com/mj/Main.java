@@ -3,7 +3,6 @@ package com.mj;
 import java.util.Comparator;
 
 import com.mj.printer.BinaryTrees;
-import com.mj.printer.BinaryTrees.PrintStyle;
 
 public class Main {
 
@@ -17,16 +16,23 @@ public class Main {
 	
 	public static void main(String[] args) {
 		
-		test2();
-//		Integer data[] = new Integer[] {
-//			7,4,9,2,5,8,11,3,12,1	
-//		};
-//		BinarySearchTree<Integer> bst0 = new BinarySearchTree<Integer>();
-//		for (int i = 0; i < data.length; i++) {
-//			bst0.add(data[i]);
-//		}
-//		BinaryTrees.println(bst0);
-			
+//		test2();
+		Integer data[] = new Integer[] {
+			7,4,9,10,2,5,8,6,11,3,12,1
+		};
+		BinarySearchTree<Integer> bst0 = new BinarySearchTree<Integer>();
+		for (int i = 0; i < data.length; i++) {
+			bst0.add(data[i]);
+		}
+		BinaryTrees.println(bst0);
+		
+		bst0.remove(7);
+		BinaryTrees.println(bst0);
+		
+//		bst0.preorderTraversal();
+//		bst0.inorderTraversal();
+//		bst0.postorderTraversal();
+//		bst0.levelOrderTraversal();
 	}
 	
 	public static void test2() {
