@@ -2,6 +2,8 @@ package com.mj.tree;
 
 import java.util.Comparator;
 
+import com.mj.tree.BinaryTree.Node;
+
 @SuppressWarnings("unchecked")
 public class BST<E> extends BinaryTree<E>  {
 
@@ -21,8 +23,9 @@ public class BST<E> extends BinaryTree<E>  {
 
     	// 添加第一个节点
     	if (root == null) {
-			root = new Node<>(element, null);
+			root = createNode(element, null);
 			size++;
+			afterAdd(root);
 			return;
 		}
     	
@@ -43,7 +46,7 @@ public class BST<E> extends BinaryTree<E>  {
     		}
 		}
     	// 创建一个新的节点
-    	Node<E> newNode = new Node<>(element, parent);
+    	Node<E> newNode = createNode(element, parent);
     	//看插入父节点哪一边
     	if (cmp > 0) {
 			parent.right = newNode;
@@ -51,9 +54,14 @@ public class BST<E> extends BinaryTree<E>  {
 			parent.left = newNode;
 		}
     	size++;
+    	// 新添加节点之后的处理
+    	afterAdd(newNode);
 	}
     
-    
+    /** 添加node之后的调整
+     * @param node
+     */
+    protected void afterAdd(Node<E> node) {}
     /**
      * 删除元素
      * @param element
@@ -104,6 +112,7 @@ public class BST<E> extends BinaryTree<E>  {
 	}
 
     
+    
     /**
      * 传递一个元素进来查找节点
      * @param element
@@ -143,5 +152,9 @@ public class BST<E> extends BinaryTree<E>  {
     
     public static interface Visitor<E> {
 		void visit(E element);
+	}
+    
+	protected Node<E> createNode(E element,Node<E> parent) {
+		return new Node<E>(element, parent);
 	}
 }

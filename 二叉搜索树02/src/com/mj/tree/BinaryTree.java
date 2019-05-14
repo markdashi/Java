@@ -113,7 +113,6 @@ public class BinaryTree<E> implements BinaryTreeInfo{
 		Node<E> left;
 		Node<E> right;
 		Node<E> parent;
-		int height;
     	public Node(E elememt,Node<E> parent) {
 			this.elememt = elememt;
 			this.parent = parent;	
@@ -132,6 +131,21 @@ public class BinaryTree<E> implements BinaryTreeInfo{
     	public boolean hasTwoChildren() {
 			return left != null && right != null;
 		}
+    	
+    	/**
+    	 * 是否父节点的左子节点
+    	 * @return
+    	 */
+    	public boolean isLeftChild() {
+			return parent != null && this == parent.left;
+		}
+    	/**
+    	 * 是否父节点的右子节点
+    	 * @return
+    	 */
+    	public boolean isRightChild() {
+    		return parent != null && this == parent.right;
+    	}
     }
     /**
      * 前驱节点 - 中序遍历的前一个节点
