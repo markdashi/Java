@@ -2,8 +2,6 @@ package com.mj.tree;
 
 import java.util.Comparator;
 
-import com.mj.tree.BinaryTree.Node;
-
 @SuppressWarnings("unchecked")
 public class BST<E> extends BinaryTree<E>  {
 
@@ -20,7 +18,6 @@ public class BST<E> extends BinaryTree<E>  {
 	}
     public void add(E element) {
     	elementNotNullCheck(element);
-
     	// 添加第一个节点
     	if (root == null) {
 			root = createNode(element, null);
@@ -30,7 +27,6 @@ public class BST<E> extends BinaryTree<E>  {
 		}
     	
     	//添加不是第一个节点
-    	
     	Node<E> node = root;
     	Node<E> parent = null;
     	int cmp = 0;
@@ -62,6 +58,11 @@ public class BST<E> extends BinaryTree<E>  {
      * @param node
      */
     protected void afterAdd(Node<E> node) {}
+    
+    /** 删除node之后的调整
+     * @param 被删除的node
+     */
+    protected void afterRemove(Node<E> node) {}
     /**
      * 删除元素
      * @param element
@@ -98,6 +99,8 @@ public class BST<E> extends BinaryTree<E>  {
 			}else { // node == node.parent.right
 				node.parent.right = replace;
 			}
+			// 删除节点之后的处理
+			afterRemove(node);
 		}else { // 度为1的节点
 			replace.parent = node.parent;
 			
@@ -108,7 +111,10 @@ public class BST<E> extends BinaryTree<E>  {
 			}else { //node == node.parent.right
 				node.parent.right = replace;
 			}
-		}    	
+			// 删除节点之后的处理
+			afterRemove(node);
+		} 
+
 	}
 
     
@@ -152,9 +158,5 @@ public class BST<E> extends BinaryTree<E>  {
     
     public static interface Visitor<E> {
 		void visit(E element);
-	}
-    
-	protected Node<E> createNode(E element,Node<E> parent) {
-		return new Node<E>(element, parent);
 	}
 }

@@ -101,6 +101,10 @@ public class BinaryTree<E> implements BinaryTreeInfo{
 		}
     	
 	}
+	protected Node<E> createNode(E element,Node<E> parent) {
+		return new Node<E>(element, parent);
+	}
+    
     public int height() {
     	return 0;
 	}
