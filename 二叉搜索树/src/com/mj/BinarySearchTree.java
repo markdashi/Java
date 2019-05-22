@@ -53,6 +53,8 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
     		}else if(cmp < 0){
     			node = node.left;
     		}else { //相等
+    			
+    			// 最好进行覆盖
     			return;
     		}
 		}
@@ -223,6 +225,36 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
     		if (node.right != null) queue.offer(node.right);
 		}
     	
+	}
+    
+    /**
+     * 是否完全二叉树
+     * @return
+     */
+    public boolean isComplete() {
+		if (root == null) return false;
+    	Queue<Node<E>> queue = new LinkedList<>();
+    	queue.offer(root);
+    	
+    	boolean leaf = false;
+    	while (!queue.isEmpty()) {
+			
+    		Node<E> node = queue.poll();
+    		if (leaf && !node.isLeaf()) return false;
+    		
+    		if (node.left != null) {
+    			 queue.offer(node.left);
+    		}else if (node.right != null) {
+				return false;
+			}
+    		if (node.right != null) {
+				queue.offer(node.right);
+			}else {  // node.right == null
+				leaf = true;
+			}
+		}
+    	
+    	return true;
 	}
     
     
